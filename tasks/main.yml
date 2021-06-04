@@ -1,0 +1,25 @@
+---
+- name: asdf-vm/asdf is cloned
+  git:
+    repo: https://github.com/asdf-vm/asdf
+    dest: "{{ asdf_install_dir }}"
+    version: "{{ asdf_version }}"
+
+- name: All plugins are installed
+  args:
+    executable: "{{ asdf_default_shell }}"
+    creates: "{{ asdf_install_dir }}/plugins/{{ item.name }}"
+  loop: "{{ asdf_plugins }}"
+  shell: >-
+    source {{ asdf_install_dir }}/{{ asdf_init_script }} &&
+    asdf plugin add {{ item.name }} {{ item.repo | default("") }
+
+- name: All versions are installed
+  args:
+    executable: "{{ asdf_default_shell }}"
+    creates: "{{ asdf_install_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
+  loop: "{{ asdf_plugins | subelements('versions', skip_missing=True) }}"
+  shell: >-
+    source {{ asdf_install_dir }}/{{ asdf_init_script }} &&
+    asdf install {{ item.0.name }} {{ item.1) }
+

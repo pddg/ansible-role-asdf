@@ -1,0 +1,10 @@
+asdf --version
+
+asdf list go
+asdf shell go 1.15.3
+go version
+
+asdf list argocd
+asdf shell argocd 2.0.3
+argocd version
+

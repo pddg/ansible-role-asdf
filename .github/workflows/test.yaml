@@ -1,0 +1,59 @@
+name: Test
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+        shell:
+          - bash
+          - zsh
+          - fish
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+      - uses: actions/cache@v2
+        if: startsWith(runner.os, 'Linux')
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - uses: actions/cache@v2
+        if: startsWith(runner.os, 'macOS')
+        with:
+          path: ~/Library/Caches/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - run: |
+          sudo apt update
+          sudo apt install ${{ matrix.shell }}
+          sudo chsh -s ${{ matrix.shell }}
+      - run: |
+          pip install -U pip
+          pip install ansible
+      - name: Run test playbook
+        run: |
+          cd tests && ansible-playbook -i inventory test.yml
+      - name: Check installed plugins (bash,zsh)
+        if: matrix.shell != "fish"
+        run: |
+          cd tests && . check.sh
+      - name: Check installed plugins (fish)
+        if: matrix.shell == "fish"
+        run: |
+          cd tests && source check.fish
