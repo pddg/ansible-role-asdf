@@ -1,3 +1,5 @@
+set -eux
+
 ASDF_ROOT=${HOME}/.asdf
 
 if [ ! -d ${ASDF_ROOT} ]; then
