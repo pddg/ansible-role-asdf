@@ -71,6 +71,7 @@ jobs:
           asdf list terraform
           asdf shell terraform 0.15.5
           terraform version
+        shell: ${{ matrix.shell }}
       - name: Check installed plugins (fish)
         if: ${{ matrix.shell == 'fish' }}
         run: |
@@ -82,3 +83,4 @@ jobs:
           asdf list terraform
           asdf shell terraform 0.15.5
           terraform version
+        shell: fish
