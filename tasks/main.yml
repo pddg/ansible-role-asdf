@@ -21,4 +21,4 @@
   loop: "{{ asdf_plugins | subelements('versions', skip_missing=True) }}"
   shell: >-
     source {{ asdf_install_dir }}/{{ asdf_init_script }} &&
-    asdf install {{ item.0.name }} {{ item.1) }}
+    asdf install {{ item.0.name }} {{ item.1 }}
