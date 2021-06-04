@@ -29,7 +29,7 @@ Example Playbook
       vars:
         asdf_version: v0.8.1
         asdf_plugins:
-          - name: go
+          - name: golang
             versions:
               - 1.15.13
           - name: argocd
