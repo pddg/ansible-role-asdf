@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: asdf
   author: pddg
   description: Manage and provision asdf-vm/asdf
   license: Apache-2.0

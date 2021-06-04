@@ -18,7 +18,7 @@ jobs:
           python-version: "3.9"
       - run: |
           pip install -U pip
-          pip install yamllint ansible-lint
+          pip install yamllint anisble ansible-lint
       - name: Check by yamllint
         run: |
           yamllint . -f github
