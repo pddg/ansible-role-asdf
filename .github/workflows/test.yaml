@@ -39,13 +39,19 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-      - run: |
+      - name: Install shell (ubuntu)
+        if: startsWith(runner.os, 'Linux')
+        run: |
           sudo apt update
           sudo apt install ${{ matrix.shell }}
           sudo chsh -s ${{ matrix.shell }}
-      - run: |
-          pip install -U pip
-          pip install ansible
+      - name: Install shell (macOS)
+        if: startsWith(runner.os, 'macOS')
+        run: |
+          if [ ${{ matrix.shell }} != "bash" ]; then
+            brew install ${{ matrix.shell }}
+          fi
+          sudo chsh -s ${{ matrix.shell }}
       - name: Run test playbook
         run: |
           cd tests && ansible-playbook -i inventory test.yml

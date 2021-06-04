@@ -4,4 +4,3 @@ asdf_install_dir: "{{ ansible_env.HOME }}/.asdf"
 asdf_default_shell: "{{ ansible_env.SHELL }}"
 asdf_init_script: "{{ (asdf_default_shell | basename == 'fish') | ternary('asdf.fish', 'asdf.sh') }}"
 asdf_versions: []
-

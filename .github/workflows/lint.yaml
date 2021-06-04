@@ -21,7 +21,7 @@ jobs:
           pip install yamllint ansible-lint
       - name: Check by yamllint
         run: |
-          yamllint .
+          yamllint . -f github
       - name: Check by ansible-lint
         run: |
           ansible-lint .
