@@ -50,10 +50,10 @@ jobs:
         run: |
           cd tests && ansible-playbook -i inventory test.yml
       - name: Check installed plugins (bash,zsh)
-        if: matrix.shell != "fish"
+        if: ${{ matrix.shell != 'fish' }}
         run: |
           cd tests && . check.sh
       - name: Check installed plugins (fish)
-        if: matrix.shell == "fish"
+        if: ${{ matrix.shell == 'fish' }}
         run: |
           cd tests && source check.fish
