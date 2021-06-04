@@ -63,7 +63,7 @@ jobs:
       - name: Check installed plugins (bash,zsh)
         if: ${{ matrix.shell != 'fish' }}
         run: |
-          cd tests && . init_asdf.sh
+          . ${HOME}/.asdf/asdf.sh
           asdf --version
           asdf list golang
           asdf shell golang 1.15.13
@@ -74,7 +74,7 @@ jobs:
       - name: Check installed plugins (fish)
         if: ${{ matrix.shell == 'fish' }}
         run: |
-          cd tests && source init_asdf.fish
+          source ${HOME}/.asdf/asdf.fish
           asdf --version
           asdf list golang
           asdf shell golang 1.15.13
