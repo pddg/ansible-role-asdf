@@ -22,38 +22,21 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: "3.9"
-      - uses: actions/cache@v2
-        if: startsWith(runner.os, 'Linux')
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-      - uses: actions/cache@v2
-        if: startsWith(runner.os, 'macOS')
-        with:
-          path: ~/Library/Caches/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-      - name: Install ansible
-        run: |
-          pip install -U pip
-          pip install ansible
-      - name: Install shell (ubuntu)
+      - name: Install shell and ansible (ubuntu)
         if: startsWith(runner.os, 'Linux')
         run: |
-          sudo apt update
-          sudo apt install ${{ matrix.shell }}
+          if ! type ${{ matrix.shell }} 2>&1 > /dev/null; then
+            sudo apt update
+            sudo apt install -y --no-install-recommends ${{ matrix.shell }}
+          fi
+          sudo apt install -y --no-install-recommends ansible
       - name: Install shell (macOS)
         if: startsWith(runner.os, 'macOS')
         run: |
-          if [ ${{ matrix.shell }} != "bash" ]; then
+          if ! type ${{ matrix.shell }} 2>&1 > /dev/null; then
             brew install ${{ matrix.shell }}
           fi
+          brew install ansible
       - name: Change default login shell
         run: |
           sudo chsh -s $(which ${{ matrix.shell }})
