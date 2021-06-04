@@ -6,4 +6,3 @@ if ! test -d {$ASDF_ROOT}
 end
 
 source {$ASDF_ROOT}/asdf.fish
-source ./check_executable

@@ -63,8 +63,22 @@ jobs:
       - name: Check installed plugins (bash,zsh)
         if: ${{ matrix.shell != 'fish' }}
         run: |
-          cd tests && . check.sh
+          cd tests && . init_asdf.sh
+          asdf --version
+          asdf list golang
+          asdf shell golang 1.15.13
+          go version
+          asdf list terraform
+          asdf shell terraform 0.15.5
+          terraform version
       - name: Check installed plugins (fish)
         if: ${{ matrix.shell == 'fish' }}
         run: |
-          cd tests && source check.fish
+          cd tests && source init_asdf.fish
+          asdf --version
+          asdf list golang
+          asdf shell golang 1.15.13
+          go version
+          asdf list terraform
+          asdf shell terraform 0.15.5
+          terraform version
