@@ -25,7 +25,7 @@ jobs:
       - name: Install shell and ansible (ubuntu)
         if: startsWith(runner.os, 'Linux')
         run: |
-          if type ${{ matrix.shell }} 2>&1 > /dev/null; then
+          if ! type ${{ matrix.shell }} 2>&1 > /dev/null; then
             sudo apt update
             sudo apt install -y --no-install-recommends ${{ matrix.shell }}
           fi
@@ -33,7 +33,7 @@ jobs:
       - name: Install shell (macOS)
         if: startsWith(runner.os, 'macOS')
         run: |
-          if type ${{ matrix.shell }} 2>&1 > /dev/null; then
+          if ! type ${{ matrix.shell }} 2>&1 > /dev/null; then
             brew install ${{ matrix.shell }}
           fi
           brew install ansible
