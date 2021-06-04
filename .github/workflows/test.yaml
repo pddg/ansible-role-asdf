@@ -60,11 +60,3 @@ jobs:
       - name: Run test playbook
         run: |
           cd tests && ansible-playbook -i inventory -e asdf_default_shell=$(which ${{ matrix.shell }}) test.yml
-      - name: Check installed plugins (bash,zsh)
-        if: ${{ matrix.shell != 'fish' }}
-        run: |
-          cd tests && ${{ matrix.shell }} -eux check.sh
-      - name: Check installed plugins (fish)
-        if: ${{ matrix.shell == 'fish' }}
-        run: |
-          cd tests && ${{ matrix.shell }} check.fish
