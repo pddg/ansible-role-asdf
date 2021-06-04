@@ -48,17 +48,18 @@ jobs:
         run: |
           sudo apt update
           sudo apt install ${{ matrix.shell }}
-          sudo chsh -s ${{ matrix.shell }}
       - name: Install shell (macOS)
         if: startsWith(runner.os, 'macOS')
         run: |
           if [ ${{ matrix.shell }} != "bash" ]; then
             brew install ${{ matrix.shell }}
           fi
-          sudo chsh -s ${{ matrix.shell }}
+      - name: Change default login shell
+        run: |
+          sudo chsh -s $(which ${{ matrix.shell }})
       - name: Run test playbook
         run: |
-          cd tests && ansible-playbook -i inventory test.yml
+          cd tests && ansible-playbook -i inventory -e asdf_default_shell=$(which ${{ matrix.shell }}) test.yml
       - name: Check installed plugins (bash,zsh)
         if: ${{ matrix.shell != 'fish' }}
         run: |
