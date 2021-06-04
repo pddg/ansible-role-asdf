@@ -1,7 +1,7 @@
 asdf --version
 
-asdf list go
-asdf shell go 1.15.3
+asdf list golang
+asdf shell golang 1.15.13
 go version
 
 asdf list argocd
