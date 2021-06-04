@@ -32,10 +32,10 @@ Example Playbook
           - name: golang
             versions:
               - 1.15.13
-          - name: argocd
-            repo: https://github.com/beardix/asdf-argocd.git.git
+          - name: terraform
+            repo: https://github.com/asdf-community/asdf-hashicorp.git
             versions:
-              - 2.0.3
+              - 0.15.5
 ```
 
 License
