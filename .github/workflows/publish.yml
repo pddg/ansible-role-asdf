@@ -38,6 +38,6 @@ jobs:
             $(echo ${GITHUB_REPOSITORY} | cut -d / -f 1) \
             $(echo ${GITHUB_REPOSITORY} | cut -d / -f 2) \
       - name: On skip
-        if: ${{ steps.add_tag.conclusion == "failure" }}
+        if: ${{ steps.add_tag.conclusion == 'failure' }}
         run: |
             echo "${ROLE_VERSION} exists. Skip publishing."
