@@ -4,9 +4,6 @@ on:
   workflow_run:
     workflows:
       - Test
-      - Lint
-    branches:
-      - maiin
     types:
       - completed
 
@@ -24,7 +21,7 @@ jobs:
       - name: Add new tag if needed
         id: add_tag
         run: |
-          if ! git rev-parse ${ROLE_VERSION} >/dev/null 2>&1; then
+          if git rev-parse ${ROLE_VERSION} >/dev/null 2>&1; then
             exit 1
           fi
           git tag ${ROLE_VERSION}
