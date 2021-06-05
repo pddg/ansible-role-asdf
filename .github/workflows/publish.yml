@@ -20,12 +20,16 @@ jobs:
       - name: Get current version
         run: |
           echo "ROLE_VERSION=$(cat VERSION)" >> $GITHUB_ENV
-      - name: Add new tag if needed
-        id: add_tag
+      - name: Check the version has already been published
+        id: is_published
+        continue-on-error: true
         run: |
           if git rev-parse ${ROLE_VERSION} >/dev/null 2>&1; then
             exit 1
           fi
+      - name: Add new tag
+        if: ${{ steps.is_published.outcome == "success" }}
+        run: |
           git tag ${ROLE_VERSION}
           git push --tags
       - name: Install ansible
@@ -40,6 +44,6 @@ jobs:
             $(echo ${GITHUB_REPOSITORY} | cut -d / -f 1) \
             $(echo ${GITHUB_REPOSITORY} | cut -d / -f 2) \
       - name: On skip
-        if: ${{ steps.add_tag.conclusion == 'failure' }}
+        if: ${{ steps.is_published.outcome == "failure" }}
         run: |
             echo "${ROLE_VERSION} exists. Skip publishing."
