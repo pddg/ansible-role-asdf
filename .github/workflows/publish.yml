@@ -28,7 +28,7 @@ jobs:
             exit 1
           fi
       - name: Add new tag
-        if: ${{ steps.is_published.outcome == "success" }}
+        if: ${{ steps.is_published.outcome == 'success' }}
         run: |
           git tag ${ROLE_VERSION}
           git push --tags
@@ -43,7 +43,23 @@ jobs:
           ansible-galaxy role import --api-key ${{ secrets.GALAXY_API_KEY }} \
             $(echo ${GITHUB_REPOSITORY} | cut -d / -f 1) \
             $(echo ${GITHUB_REPOSITORY} | cut -d / -f 2) \
+      - name: Get CHANGELOG
+        if: ${{ success() }}
+        run: |
+          awk -v version=${ROLE_VERSION} -f extract-release.awk CHANGELOG.md > current-CHANGELOG.md
+      - name: Create Release
+        if: ${{ success() }}
+        uses: softprops/action-gh-release@v1
+        with:
+          name: ${{ env.ROLE_VERSION }}
+          tag_name: ${{ env.ROLE_VERSION }}
+          draft: false
+          prerelease: false
+          body_path: current-CHANGELOG.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ env.GITHUB_REPOSITORY }}
       - name: On skip
-        if: ${{ steps.is_published.outcome == "failure" }}
+        if: ${{ steps.is_published.outcome == 'failure' }}
         run: |
             echo "${ROLE_VERSION} exists. Skip publishing."
