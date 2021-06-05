@@ -1,0 +1,46 @@
+name: Publish
+
+on:
+  workflow_run:
+    workflows:
+      - Test
+      - Lint
+    branches:
+      - maiin
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: "0"
+      - name: Get current version
+        run: |
+          echo "ROLE_VERSION=$(cat VERSION)" >> $GITHUB_ENV
+      - name: Add new tag if needed
+        id: add_tag
+        run: |
+          if ! git rev-parse ${ROLE_VERSION} >/dev/null 2>&1; then
+            exit 1
+          fi
+          git tag ${ROLE_VERSION}
+          git push --tags
+      - name: Install ansible
+        if: ${{ success() }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ansible
+      - name: Invoke import
+        if: ${{ success() }}
+        run: |
+          ansible-galaxy role import --api-key ${{ secrets.GALAXY_API_KEY }} \
+            $(echo ${GITHUB_REPOSITORY} | cut -d / -f 1) \
+            $(echo ${GITHUB_REPOSITORY} | cut -d / -f 2) \
+      - name: On skip
+        if: ${{ steps.add_tag.conclusion == "failure" }}
+        run: |
+            echo "${ROLE_VERSION} exists. Skip publishing."
