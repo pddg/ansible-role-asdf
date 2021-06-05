@@ -4,6 +4,7 @@ pddg.asdf
 [![Test](https://github.com/pddg/ansible-role-asdf/actions/workflows/test.yaml/badge.svg)](https://github.com/pddg/ansible-role-asdf/actions/workflows/test.yaml)
 
 Ansible role to manage asdf and its plugins.
+This role do not modify your configuration for shell such as .bashrc and .zshrc.
 
 Requirements
 ------------

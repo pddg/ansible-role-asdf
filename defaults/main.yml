@@ -1,6 +1,28 @@
 ---
+# You can see all versions from https://github.com/asdf-vm/asdf/releases
 asdf_version: v0.8.1
+
+# Path to install directory.
 asdf_install_dir: "{{ ansible_env.HOME }}/.asdf"
+
+# Path to shell to install asdf plugins.
+# Following shells are tested.
+#   - bash
+#   - zsh
+#   - fish
+# This role does not modify your shell configurations, for example .bashrc.
+# Configuring them is user's responsibility.
 asdf_default_shell: "/bin/bash"
+
+# The default init script is `asdf.sh`, and `asdf.fish` is used only when fish is used as `asdf_default_shell`.
+# If you are using a shell that does not fit into any of these, change this setting.
 asdf_init_script: "{{ (asdf_default_shell | basename == 'fish') | ternary('asdf.fish', 'asdf.sh') }}"
+
+# List plugins and versions to install.
+# asdf_versions:
+#   - name: PLUGIN_NAME (required)
+#     repo: PLUGIN_REPOSITORY_URL (optional)
+#     versions:
+#       - 1.0.0
+#       - 2.0.0
 asdf_versions: []
